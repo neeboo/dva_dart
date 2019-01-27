@@ -14,6 +14,9 @@ class PutEffect extends Effect {
   }
 
   @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
+  @override
   String toString() {
     return 'PutEffect(${this.key},${this.payload})';
   }

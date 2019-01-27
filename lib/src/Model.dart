@@ -1,5 +1,4 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:dva_dart/src/Action.dart';
 import 'package:dva_dart/src/State.dart';
 import 'package:dva_dart/src/Effect.dart';
 import 'package:dva_dart/src/Reducer.dart';
