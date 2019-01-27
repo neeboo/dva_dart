@@ -68,7 +68,7 @@ void main() async {
   ReducerWatcher().delegate = MyReducerDelegate();
 
   DvaModel model =
-      DvaModel(nameSpace: 'test', state: TestState(1, 2, 3), reducers: {
+      DvaModel(nameSpace: 'test', initialState: TestState(1, 2, 3), reducers: {
     'updateState': (State state, Payload payload) {
       return MutatedState(payload.toString());
     },

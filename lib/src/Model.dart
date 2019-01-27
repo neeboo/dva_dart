@@ -15,7 +15,8 @@ class DvaModel implements BaseModel {
   final PublishSubject<CallEffect> _callSubject = PublishSubject<CallEffect>();
 
   String nameSpace;
-  State state;
+  Stream<State> get state => _stateSubject.stream;
+  State initialState;
   Map<String, dynamic> reducers;
   Map<String, dynamic> effects;
 
@@ -24,16 +25,16 @@ class DvaModel implements BaseModel {
   State get currentState => _stateSubject.value;
   DvaModel({
     String nameSpace,
-    State state,
+    State initialState,
     Map<String, dynamic> reducers,
     Map<String, dynamic> effects,
   }) {
     this.nameSpace = nameSpace ?? '';
-    this.state = state ?? {};
+    this.initialState = initialState ?? {};
     this.reducers = reducers ?? {};
     this.effects = effects ?? {};
     // this.subscriptions = subscriptions ?? {};
-    _stateSubject = BehaviorSubject<State>(seedValue: state);
+    _stateSubject = BehaviorSubject<State>(seedValue: initialState);
     _bindStateSubject();
   }
   void dispatch(Stream action) {
