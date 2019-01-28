@@ -10,7 +10,7 @@ class DvaStore {
     var foundEffect = found[1];
     var foundPayload = found[2];
     foundModel.dispatch(foundEffect(foundPayload));
-    return foundEffect;
+    return foundModel.state;
   }
 
   _extractAction(Action action) {

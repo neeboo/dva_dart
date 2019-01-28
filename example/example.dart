@@ -88,9 +88,9 @@ void main() async {
   Action abc1 = createAction('test/asyncAdd')(pl1);
   Action abc2 = createAction('test/appending')(pl2);
   // Action abc3 = createAction('test/appending')(pl);
-  store.dispatch(abc1);
+  var result1 = store.dispatch(abc1);
   store.dispatch(abc2);
-
+  print(result1);
   // store.dispatch(abc3);
 
   // var initState = State(initialState: {'abc': '@@@'});
