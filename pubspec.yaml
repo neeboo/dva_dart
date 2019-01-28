@@ -1,6 +1,6 @@
 name: dva_dart
 description: State manager for dart and flutter, using idea from dva.js and combined with rxdart, a simpler way to manage your app's state.
-version: 0.0.6
+version: 0.0.7
 author: neeboo <neeboo@firestack>
 homepage: https://github.com/neeboo/dva_dart
 

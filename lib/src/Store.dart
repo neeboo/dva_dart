@@ -4,13 +4,14 @@ import 'package:dva_dart/src/Action.dart';
 class DvaStore {
   List<DvaModel> models;
   DvaStore({this.models});
-  dispatch(Action action) {
+  Stream stateStream;
+  void dispatch(Action action) {
     var found = this._extractAction(action);
     DvaModel foundModel = found[0];
     var foundEffect = found[1];
     var foundPayload = found[2];
     foundModel.dispatch(foundEffect(foundPayload));
-    return foundModel.state;
+    stateStream = foundModel.state;
   }
 
   _extractAction(Action action) {
