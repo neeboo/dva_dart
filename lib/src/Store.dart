@@ -9,7 +9,7 @@ class DvaStore {
     this.models = models;
     _storeController.stream.listen(dispatch);
   }
-  Stream stateStream = Stream.empty();
+  Stream stateStream = Stream.fromIterable([0]);
   void dispatch(Action action) {
     var found = this._extractAction(action);
     DvaModel foundModel = found[0];
