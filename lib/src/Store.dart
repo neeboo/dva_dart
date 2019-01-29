@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'package:dva_dart/src/Model.dart';
 import 'package:dva_dart/src/Action.dart';
 
 class DvaStore {
   List<DvaModel> models;
-  DvaStore({this.models});
+  StreamController<Action> _storeController = StreamController<Action>();
+  DvaStore({this.models}) {
+    _storeController.stream.listen(dispatch);
+  }
   Stream stateStream;
   void dispatch(Action action) {
     var found = this._extractAction(action);
@@ -34,5 +38,9 @@ class DvaStore {
 
   _getPayload(Action action) {
     return action.payload;
+  }
+
+  void dispose() {
+    _storeController.close();
   }
 }
