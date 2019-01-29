@@ -5,12 +5,11 @@ import 'package:dva_dart/src/Action.dart';
 
 class DvaStore {
   List<DvaModel> models;
-  StreamController<Stream<State>> _storeController =
-      StreamController<Stream<State>>();
+  StreamController<State> _storeController = StreamController<State>();
   DvaStore({models}) {
     this.models = models;
   }
-  Stream<Stream<State>> get stateStream => _storeController.stream;
+  Stream<State> get stateStream => _storeController.stream;
 
   void dispatch(Action action) {
     var found = this._extractAction(action);
@@ -18,11 +17,9 @@ class DvaStore {
     var foundEffect = found[1];
     var foundPayload = found[2];
     foundModel.dispatch(foundEffect(foundPayload));
-    addStateStreamToSink(foundModel.state);
-  }
-
-  void addStateStreamToSink(Stream<State> s) {
-    _storeController.sink.add(s);
+    foundModel.state.listen((onData) {
+      _storeController.sink.add(onData);
+    });
   }
 
   _extractAction(Action action) {
