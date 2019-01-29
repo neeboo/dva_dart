@@ -10,28 +10,14 @@ class Action {
   }
 }
 
-class Payload {
-  Map _payloadStore;
+class Payload<T> {
+  T _payloadStore;
 
-  Map get payload => this._payloadStore;
+  Map get payloadObject => {'payload': this._payloadStore};
 
-  String get payloadString => json.encode(this.payload);
+  String get payloadString => json.encode(this.payloadObject);
 
   Payload(this._payloadStore);
-
-  factory Payload.create() {
-    return Payload(Map());
-  }
-
-  /// create map for store
-  void update({String key, dynamic value}) {
-    _payloadStore.update(key, (val) => value, ifAbsent: () => value);
-  }
-
-  /// build all payload to map
-  Payload build() {
-    return this;
-  }
 
   /// enode json
   @override

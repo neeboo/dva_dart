@@ -49,14 +49,9 @@ class MyReducerDelegate implements ReducerDelegate {
 }
 
 void main() async {
-  var newPayload = Payload.create();
-  var pl1 = newPayload
-    ..update(key: 'a', value: 1)
-    ..build();
-  var newPayload2 = Payload.create();
-  var pl2 = newPayload2
-    ..update(key: 'a', value: 10)
-    ..build();
+  var pl1 = Payload<Map>({'a': 1});
+
+  var pl2 = Payload<Map>({'a': 10});
 
   Future add(p) async {
     return await p + 1;
@@ -73,9 +68,11 @@ void main() async {
       return MutatedState(payload.toString());
     },
   }, effects: {
-    'asyncAdd': (Payload payload) async* {
-      var added = await add(payload.payload['a']);
-      payload.update(key: 'a', value: added);
+    'asyncAdd': (Payload<Map> payload) async* {
+      print(payload);
+      var added = await add(payload.payloadObject['payload']['a']);
+      payload.payloadObject['payload']
+          .update('a', (value) => value = added, ifAbsent: () => {'a': added});
       await Future<void>.delayed(Duration(seconds: 1));
       yield PutEffect(key: 'updateState', payload: payload);
     },
