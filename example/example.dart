@@ -60,7 +60,7 @@ void main() async {
   //
   //
   //
-  ReducerWatcher().delegate = MyReducerDelegate();
+  // ReducerWatcher().delegate = MyReducerDelegate();
 
   DvaModel model =
       DvaModel(nameSpace: 'test', initialState: TestState(1, 2, 3), reducers: {
@@ -69,7 +69,6 @@ void main() async {
     },
   }, effects: {
     'asyncAdd': (Payload<Map> payload) async* {
-      print(payload);
       var added = await add(payload.payloadObject['payload']['a']);
       payload.payloadObject['payload']
           .update('a', (value) => value = added, ifAbsent: () => {'a': added});
@@ -85,6 +84,10 @@ void main() async {
   Action abc1 = createAction('test/asyncAdd')(pl1);
   Action abc2 = createAction('test/appending')(pl2);
   // Action abc3 = createAction('test/appending')(pl);
+
+  store.stateStream.listen((onData) {
+    print(onData);
+  });
   store.dispatch(abc1);
   store.dispatch(abc2);
 

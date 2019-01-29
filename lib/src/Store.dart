@@ -5,10 +5,11 @@ import 'package:dva_dart/src/Action.dart';
 class DvaStore {
   List<DvaModel> models;
   StreamController<Action> _storeController = StreamController<Action>();
-  DvaStore({this.models}) {
+  DvaStore({models}) {
+    this.models = models;
     _storeController.stream.listen(dispatch);
   }
-  Stream stateStream;
+  Stream stateStream = Stream.empty();
   void dispatch(Action action) {
     var found = this._extractAction(action);
     DvaModel foundModel = found[0];
