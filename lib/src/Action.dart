@@ -11,13 +11,13 @@ class Action {
 }
 
 class Payload<T> {
-  T _payloadStore;
+  T payload;
 
-  Map get payloadObject => {'payload': this._payloadStore};
+  Map get payloadObject => {'payload': this.payload};
 
   String get payloadString => json.encode(this.payloadObject);
 
-  Payload(this._payloadStore);
+  Payload(this.payload);
 
   /// enode json
   @override
