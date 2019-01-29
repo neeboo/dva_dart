@@ -85,6 +85,15 @@ void main() async {
   Action abc2 = createAction('test/appending')(pl2);
   // Action abc3 = createAction('test/appending')(pl);
 
+  // final StreamSubscription subscription =
+  //     store.storeController.stream.listen((onData) {
+  //   print(onData);
+  // });
+  // store.dispatch(abc1);
+  // store.dispatch(abc2);
+
+  // 初始化一个监听
+
   store.stateStream.listen((onData) {
     print(onData);
   });
