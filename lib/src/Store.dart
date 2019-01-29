@@ -4,10 +4,9 @@ import 'package:dva_dart/src/Action.dart';
 
 class DvaStore {
   List<DvaModel> models;
-  StreamController<Action> _storeController = StreamController<Action>();
+
   DvaStore({models}) {
     this.models = models;
-    _storeController.stream.listen(dispatch);
   }
   Stream stateStream = Stream.fromIterable([0]);
   void dispatch(Action action) {
@@ -39,9 +38,5 @@ class DvaStore {
 
   _getPayload(Action action) {
     return action.payload;
-  }
-
-  void dispose() {
-    _storeController.close();
   }
 }
