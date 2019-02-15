@@ -9,7 +9,7 @@ class DvaStore {
   DvaStore({models}) {
     this.models = models;
   }
-  Stream<State> get stateStream => _storeController.stream;
+  Stream<State> get stateStream => _storeController.stream.asBroadcastStream();
 
   void dispatch(Action action) {
     var found = this._extractAction(action);
