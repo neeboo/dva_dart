@@ -99,6 +99,8 @@ void main() async {
   });
   store.dispatch(abc1);
   store.dispatch(abc2);
+  store.dispatch(abc1);
+  store.dispatch(abc2);
 
   // store.dispatch(abc2);
 
