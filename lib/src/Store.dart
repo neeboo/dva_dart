@@ -8,7 +8,7 @@ class DvaStore<S> {
   DvaStore({models}) {
     this.models = models;
   }
-  Stream<S> get stateStream => _storeController.stream.asBroadcastStream();
+  Stream<S> get stateStream => _storeController.stream;
   DvaModel currentModel;
 
   void dispatch(Action action) {
