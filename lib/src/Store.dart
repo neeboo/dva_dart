@@ -4,12 +4,23 @@ import 'package:dva_dart/src/Action.dart';
 
 class DvaStore<S> {
   List<DvaModel> models;
-  StreamController<S> _storeController = StreamController<S>();
+  List<ModelStream<StreamController<S>>> modelStreams;
+  DvaModel currentModel;
+
+  ///
+  ///
+  List<ModelInitialState<S>> get modelInitials => models
+      .map<ModelInitialState<S>>(
+          (m) => ModelInitialState(m.nameSpace, m.initialState))
+      .toList();
+
+  ///
+  ///
+  ///
   DvaStore({models}) {
     this.models = models;
+    _createModelStreams();
   }
-  Stream<S> get stateStream => _storeController.stream;
-  DvaModel currentModel;
 
   void dispatch(Action action) {
     var found = this._extractAction(action);
@@ -19,8 +30,20 @@ class DvaStore<S> {
     var foundPayload = found[2];
     foundModel.dispatch(foundEffect(foundPayload));
     foundModel.state.listen((onData) {
-      _storeController.sink.add(onData);
+      modelStreams
+          .singleWhere((m) {
+            return m.nameSpace == foundModel.nameSpace;
+          })
+          .streamController
+          .sink
+          .add(onData);
     });
+  }
+
+  _createModelStreams() {
+    modelStreams = List.generate(models.length, (index) {
+      return ModelStream(models[index].nameSpace, StreamController<S>());
+    }, growable: true);
   }
 
   _extractAction(Action action) {
@@ -46,6 +69,49 @@ class DvaStore<S> {
   }
 
   void dispose() {
-    _storeController.close();
+    modelStreams.forEach((ms) {
+      ms.streamController.close();
+    });
   }
+
+  Stream<S> getStream(String nameSpace) {
+    return modelStreams
+        .singleWhere((m) {
+          return m.nameSpace == nameSpace;
+        })
+        .streamController
+        .stream;
+  }
+
+  Stream<S> getStreamAsBroadcast(String nameSpace) {
+    return modelStreams
+        .singleWhere((m) {
+          return m.nameSpace == nameSpace;
+        })
+        .streamController
+        .stream
+        .asBroadcastStream();
+  }
+
+  S getInitalState(String nameSpace) {
+    return models.singleWhere((m) {
+      return m.nameSpace == nameSpace;
+    }).initialState;
+  }
+
+  Stream<S> getModelStream(String nameSpace) {
+    return models.singleWhere((m) => m.nameSpace == nameSpace).state;
+  }
+}
+
+class ModelStream<C> {
+  String nameSpace;
+  C streamController;
+  ModelStream(this.nameSpace, this.streamController);
+}
+
+class ModelInitialState<S> {
+  String nameSpace;
+  S intialState;
+  ModelInitialState(this.nameSpace, this.intialState);
 }

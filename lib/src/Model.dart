@@ -63,6 +63,7 @@ class DvaModel<S> implements BaseModel {
       var state = reducers[effect.key](currentState, effect.payload);
       yield state;
     } else
+      //TODO: should implement with cross model effect
       yield null;
   }
 
