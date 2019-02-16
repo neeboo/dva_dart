@@ -42,7 +42,8 @@ class DvaStore<S> {
 
   _createModelStreams() {
     modelStreams = List.generate(models.length, (index) {
-      return ModelStream(models[index].nameSpace, StreamController<S>());
+      return ModelStream(
+          models[index].nameSpace, StreamController<S>.broadcast());
     }, growable: true);
   }
 

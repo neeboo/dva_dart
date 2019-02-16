@@ -94,20 +94,20 @@ void main() async {
 
   // 初始化一个监听
 
-  var sss = store.getStream('test2');
-  sss.listen((onData) {
-    print(onData);
-  });
-
-  // var listener = store.getStreamAsBroadcast('test');
-  // listener.listen((onData) {
+  // store.stateStream.listen((onData) {
   //   print(onData);
   // });
-
+  var listner = store.getStreamAsBroadcast('test');
+  listner.listen((onData) {
+    print(onData);
+  });
+  store.getStreamAsBroadcast('test').listen((onData) {
+    print(onData);
+  });
   store.dispatch(abc1);
-  // store.dispatch(abc2);
-  // store.dispatch(abc1);
-  // store.dispatch(abc2);
+  store.dispatch(abc2);
+  store.dispatch(abc1);
+  store.dispatch(abc2);
 
   // store.dispatch(abc2);
 
