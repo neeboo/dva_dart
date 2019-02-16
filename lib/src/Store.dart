@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dva_dart/src/Model.dart';
 import 'package:dva_dart/src/Action.dart';
+import 'package:rxdart/rxdart.dart';
 
 class DvaStore<S> {
   List<DvaModel> models;
@@ -42,8 +43,7 @@ class DvaStore<S> {
 
   _createModelStreams() {
     modelStreams = List.generate(models.length, (index) {
-      return ModelStream(
-          models[index].nameSpace, StreamController<S>.broadcast());
+      return ModelStream(models[index].nameSpace, BehaviorSubject<S>());
     }, growable: true);
   }
 
