@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'package:dva_dart/src/State.dart';
 import 'package:dva_dart/src/Model.dart';
 import 'package:dva_dart/src/Action.dart';
 
-class DvaStore {
+class DvaStore<S> {
   List<DvaModel> models;
-  StreamController<State> _storeController = StreamController<State>();
+  StreamController<S> _storeController = StreamController<S>();
   DvaStore({models}) {
     this.models = models;
   }
-  Stream<State> get stateStream => _storeController.stream.asBroadcastStream();
+  Stream<S> get stateStream => _storeController.stream.asBroadcastStream();
   DvaModel currentModel;
 
   void dispatch(Action action) {

@@ -1,3 +1,3 @@
 abstract class State<T> {
-  const State._();
+  const State();
 }

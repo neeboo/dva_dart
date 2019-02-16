@@ -1,5 +1,4 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:dva_dart/src/State.dart';
 import 'package:dva_dart/src/Effect.dart';
 import 'package:dva_dart/src/Reducer.dart';
 
@@ -9,23 +8,23 @@ abstract class ReducerDelegate {
   void onReducer(Reducer transition);
 }
 
-class DvaModel implements BaseModel {
+class DvaModel<S> implements BaseModel {
   final PublishSubject _actionSubject = PublishSubject();
   final PublishSubject<PutEffect> _putSubject = PublishSubject<PutEffect>();
   final PublishSubject<CallEffect> _callSubject = PublishSubject<CallEffect>();
 
   String nameSpace;
-  Stream<State> get state => _stateSubject.stream;
-  State initialState;
+  Stream<S> get state => _stateSubject.stream;
+  S initialState;
   Map<String, dynamic> reducers;
   Map<String, dynamic> effects;
 
   ///
-  BehaviorSubject<State> _stateSubject;
-  State get currentState => _stateSubject.value;
+  BehaviorSubject<S> _stateSubject;
+  S get currentState => _stateSubject.value;
   DvaModel({
     String nameSpace,
-    State initialState,
+    S initialState,
     Map<String, dynamic> reducers,
     Map<String, dynamic> effects,
   }) {
@@ -34,7 +33,7 @@ class DvaModel implements BaseModel {
     this.reducers = reducers ?? {};
     this.effects = effects ?? {};
     // this.subscriptions = subscriptions ?? {};
-    _stateSubject = BehaviorSubject<State>(seedValue: initialState);
+    _stateSubject = BehaviorSubject<S>(seedValue: initialState);
     _bindStateSubject();
   }
   void dispatch(Stream action) {
@@ -56,11 +55,10 @@ class DvaModel implements BaseModel {
     _stateSubject.close();
   }
 
-  void onReducer(Reducer<State, PutEffect> reducer) => null;
+  void onReducer(Reducer<S, PutEffect> reducer) => null;
 
   Stream<Effect> transform(Stream<Effect> effect) => effect;
-  Stream<State> mapPutEffectToReducer(
-      State currentState, PutEffect effect) async* {
+  Stream<S> mapPutEffectToReducer(S currentState, PutEffect effect) async* {
     if (reducers.containsKey(effect.key)) {
       var state = reducers[effect.key](currentState, effect.payload);
       yield state;
@@ -75,7 +73,7 @@ class DvaModel implements BaseModel {
       currentPutEffect = put;
       return mapPutEffectToReducer(_stateSubject.value, put);
     }).forEach(
-      (State nextState) {
+      (S nextState) {
         if (currentState == nextState) return;
         final transition = Reducer(
           currentState: _stateSubject.value,

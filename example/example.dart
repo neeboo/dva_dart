@@ -6,16 +6,6 @@ import 'package:dva_dart/src/Action.dart';
 import 'package:dva_dart/src/Store.dart';
 import 'package:dva_dart/src/Reducer.dart';
 
-enum ContractStatus {
-  INITIALISED,
-  TESTED,
-  ERROR,
-  SIGNED,
-  SENT,
-  REJECTED,
-  DEPLOYED
-}
-
 //
 //
 //
@@ -51,7 +41,7 @@ class MyReducerDelegate implements ReducerDelegate {
 void main() async {
   var pl1 = Payload<Map>({'a': 1});
 
-  var pl2 = Payload<Map>({'b': 10});
+  var pl2 = Payload<String>('i am a payload');
 
   Future add(p) async {
     return await p + 1;
@@ -83,16 +73,9 @@ void main() async {
   DvaModel model2 =
       DvaModel(nameSpace: 'test2', initialState: TestState(1, 2, 3), reducers: {
     'updateState': (State state, Payload payload) {
-      return MutatedState(payload.toString());
+      return MutatedState(payload.toString() + 'mutated');
     },
   }, effects: {
-    'asyncAdd': (Payload<Map> payload) async* {
-      var added = await add(payload.payloadObject['payload']['a']);
-      payload.payloadObject['payload']
-          .update('a', (value) => value = added, ifAbsent: () => {'a': added});
-      await Future<void>.delayed(Duration(seconds: 1));
-      yield PutEffect(key: 'updateState', payload: payload);
-    },
     'appending': (Payload payload) async* {
       yield PutEffect(key: 'updateState', payload: payload);
     }
@@ -101,7 +84,6 @@ void main() async {
   DvaStore store = DvaStore(models: <DvaModel>[model, model2]);
   Action abc1 = createAction('test/asyncAdd')(pl1);
   Action abc2 = createAction('test2/appending')(pl2);
-  // Action abc3 = createAction('test/appending')(pl);
 
   // final StreamSubscription subscription =
   //     store.storeController.stream.listen((onData) {
@@ -117,6 +99,8 @@ void main() async {
   });
   store.dispatch(abc1);
   store.dispatch(abc2);
+
+  // store.dispatch(abc2);
 
   // store.dispatch(abc3);
 

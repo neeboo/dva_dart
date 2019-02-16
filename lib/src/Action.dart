@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-class Action {
+class Action<P> {
   final String type;
-  final dynamic payload;
+  final P payload;
   Action({this.type, this.payload});
   @override
   String toString() {
@@ -24,8 +24,8 @@ class Payload<T> {
   String toString() => this.payloadString;
 }
 
-typedef ActionCreator(dynamic type);
+typedef ActionCreator<T>(T type);
 
-ActionCreator createAction(dynamic type) {
-  return (payload) => Action(type: type.toString(), payload: payload);
+ActionCreator createAction<T>(String type) {
+  return (payload) => Action<T>(type: type, payload: payload);
 }

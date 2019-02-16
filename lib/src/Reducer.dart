@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
 
-class Reducer<State, T> {
-  final State currentState;
+class Reducer<S, T> {
+  final S currentState;
   final T effect;
-  final State nextState;
+  final S nextState;
 
   const Reducer({
     @required this.currentState,
@@ -16,7 +16,7 @@ class Reducer<State, T> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Reducer<State, T> &&
+      other is Reducer<S, T> &&
           runtimeType == other.runtimeType &&
           currentState == other.currentState &&
           nextState == other.nextState;
