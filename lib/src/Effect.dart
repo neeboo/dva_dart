@@ -1,11 +1,11 @@
 import "dart:async";
 import 'Action.dart';
 
-abstract class Effect<T> {
+abstract class DvaEffect<T> {
   Completer<T> completer;
 }
 
-class PutEffect extends Effect {
+class PutEffect extends DvaEffect {
   String key;
   Payload payload;
   PutEffect({this.key, this.payload});
@@ -22,7 +22,7 @@ class PutEffect extends Effect {
   }
 }
 
-abstract class CallableEffect extends Effect implements Function {
+abstract class CallableEffect extends DvaEffect implements Function {
   Future call();
 }
 

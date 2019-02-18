@@ -5,7 +5,7 @@ import 'package:dva_dart/src/Reducer.dart';
 abstract class BaseModel {}
 
 abstract class ReducerDelegate {
-  void onReducer(Reducer transition);
+  void onReducer(DvaReducer transition);
 }
 
 class DvaModel<S> implements BaseModel {
@@ -55,9 +55,9 @@ class DvaModel<S> implements BaseModel {
     _stateSubject.close();
   }
 
-  void onReducer(Reducer<S, PutEffect> reducer) => null;
+  void onReducer(DvaReducer<S, PutEffect> reducer) => null;
 
-  Stream<Effect> transform(Stream<Effect> effect) => effect;
+  Stream<DvaEffect> transform(Stream<DvaEffect> effect) => effect;
   Stream<S> mapPutEffectToReducer(S currentState, PutEffect effect) async* {
     if (reducers.containsKey(effect.key)) {
       var state = reducers[effect.key](currentState, effect.payload);
@@ -76,7 +76,7 @@ class DvaModel<S> implements BaseModel {
     }).forEach(
       (S nextState) {
         if (currentState == nextState) return;
-        final transition = Reducer(
+        final transition = DvaReducer(
           currentState: _stateSubject.value,
           effect: currentPutEffect,
           nextState: nextState,

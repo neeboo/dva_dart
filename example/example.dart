@@ -10,7 +10,7 @@ import 'package:dva_dart/src/Reducer.dart';
 //
 //
 //
-class TestState implements State {
+class TestState implements DvaState {
   final int a;
   final int b;
   final int c;
@@ -22,7 +22,7 @@ class TestState implements State {
   }
 }
 
-class MutatedState implements State {
+class MutatedState implements DvaState {
   final String a;
   MutatedState(this.a);
   @override
@@ -33,7 +33,7 @@ class MutatedState implements State {
 
 class MyReducerDelegate implements ReducerDelegate {
   @override
-  void onReducer(Reducer reducer) {
+  void onReducer(DvaReducer reducer) {
     print(reducer.toString());
   }
 }
@@ -54,7 +54,7 @@ void main() async {
 
   DvaModel model =
       DvaModel(nameSpace: 'test', initialState: TestState(1, 2, 3), reducers: {
-    'updateState': (State state, Payload payload) {
+    'updateState': (DvaState state, Payload payload) {
       return MutatedState(payload.toString());
     },
   }, effects: {
@@ -72,7 +72,7 @@ void main() async {
 
   DvaModel model2 =
       DvaModel(nameSpace: 'test2', initialState: TestState(1, 2, 3), reducers: {
-    'updateState': (State state, Payload payload) {
+    'updateState': (DvaState state, Payload payload) {
       return MutatedState(payload.toString() + 'mutated');
     },
   }, effects: {
