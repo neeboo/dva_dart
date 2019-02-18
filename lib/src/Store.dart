@@ -7,6 +7,7 @@ class DvaStore<S> {
   List<DvaModel> models;
   List<ModelStream<StreamController<S>>> modelStreams;
   DvaModel currentModel;
+  List<String> effectKeys = [];
 
   ///
   ///
@@ -21,6 +22,9 @@ class DvaStore<S> {
   DvaStore({models}) {
     this.models = models;
     _createModelStreams();
+    _getEffectKeys();
+    _setEffectKeysToModel();
+    _setDispatchToModel();
   }
 
   void dispatch(Action action) {
@@ -67,6 +71,24 @@ class DvaStore<S> {
 
   _getPayload(Action action) {
     return action.payload;
+  }
+
+  _getEffectKeys() {
+    return models.forEach((m) {
+      effectKeys.addAll(m.effects.keys.map((d) => '${m.nameSpace}/${d}'));
+    });
+  }
+
+  void _setEffectKeysToModel() {
+    models.forEach((m) {
+      m.setAllEffectKeys(effectKeys);
+    });
+  }
+
+  void _setDispatchToModel() {
+    models.forEach((m) {
+      m.setStoreDispatch(dispatch);
+    });
   }
 
   void dispose() {

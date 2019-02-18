@@ -78,6 +78,7 @@ void main() async {
   }, effects: {
     'appending': (Payload payload) async* {
       yield PutEffect(key: 'updateState', payload: payload);
+      yield PutEffect(key: 'test/appending', payload: Payload('fuck you'));
     }
   });
 
@@ -97,16 +98,16 @@ void main() async {
   // store.stateStream.listen((onData) {
   //   print(onData);
   // });
-  var listner = store.getStreamAsBroadcast('test');
-  listner.listen((onData) {
-    print(onData);
-  });
+  var listner = store.getStreamAsBroadcast('test2');
+  // listner.listen((onData) {
+  //   print(onData);
+  // });
   store.getStreamAsBroadcast('test').listen((onData) {
     print(onData);
   });
-  store.dispatch(abc1);
-  store.dispatch(abc2);
-  store.dispatch(abc1);
+  // store.dispatch(abc1);
+  // store.dispatch(abc2);
+  // store.dispatch(abc1);
   store.dispatch(abc2);
 
   // store.dispatch(abc2);

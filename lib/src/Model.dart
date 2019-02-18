@@ -1,6 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:dva_dart/src/Effect.dart';
 import 'package:dva_dart/src/Reducer.dart';
+import 'package:dva_dart/src/Action.dart';
 
 abstract class BaseModel {}
 
@@ -18,6 +19,8 @@ class DvaModel<S> implements BaseModel {
   S initialState;
   Map<String, dynamic> reducers;
   Map<String, dynamic> effects;
+  List<String> _allEffectKeys;
+  Function _storeDispatch;
 
   ///
   BehaviorSubject<S> _stateSubject;
@@ -48,6 +51,27 @@ class DvaModel<S> implements BaseModel {
     });
   }
 
+  void setAllEffectKeys(List<String> keys) {
+    _allEffectKeys = keys;
+  }
+
+  void setStoreDispatch(Function cb) {
+    _storeDispatch = cb;
+  }
+
+  void debounceEffect(key, payload) {
+    try {
+      var foundEffect = _allEffectKeys.singleWhere((k) {
+        return k == key;
+      });
+      if (foundEffect != null) {
+        _storeDispatch(createAction(key)(payload));
+      }
+    } catch (e) {
+      throw 'There is no Effect key found: $key';
+    }
+  }
+
   void dispose() {
     _putSubject.close();
     _callSubject.close();
@@ -62,9 +86,10 @@ class DvaModel<S> implements BaseModel {
     if (reducers.containsKey(effect.key)) {
       var state = reducers[effect.key](currentState, effect.payload);
       yield state;
-    } else
-      //TODO: should implement with cross model effect
-      yield null;
+    } else {
+      debounceEffect(effect.key, effect.payload);
+      // yield null;
+    }
   }
 
   void _bindStateSubject() {
