@@ -1,15 +1,22 @@
+import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:dva_dart/src/Effect.dart';
 import 'package:dva_dart/src/Reducer.dart';
 import 'package:dva_dart/src/Action.dart';
 
-abstract class BaseModel {}
+abstract class BaseModel<S, T, D> {
+  String nameSpace;
+  S initialState;
+  T reducers;
+  D effects;
+}
 
 abstract class ReducerDelegate {
   void onReducer(DvaReducer transition);
 }
 
-class DvaModel<S> implements BaseModel {
+class DvaModel<S>
+    implements BaseModel<S, Map<String, dynamic>, Map<String, dynamic>> {
   final PublishSubject _actionSubject = PublishSubject();
   final PublishSubject<PutEffect> _putSubject = PublishSubject<PutEffect>();
   final PublishSubject<CallEffect> _callSubject = PublishSubject<CallEffect>();
@@ -36,7 +43,7 @@ class DvaModel<S> implements BaseModel {
     this.reducers = reducers ?? {};
     this.effects = effects ?? {};
     // this.subscriptions = subscriptions ?? {};
-    _stateSubject = BehaviorSubject<S>(seedValue: initialState);
+    _stateSubject = BehaviorSubject<S>.seeded(initialState);
     _bindStateSubject();
   }
   void dispatch(Stream action) {
@@ -123,5 +130,5 @@ class ReducerWatcher {
     return _singleton;
   }
 
-  ReducerWatcher._internal() {}
+  ReducerWatcher._internal();
 }
