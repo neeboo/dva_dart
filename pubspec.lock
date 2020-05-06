@@ -210,7 +210,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.22.1+1"
+    version: "0.24.0"
   shelf:
     dependency: transitive
     description:
@@ -345,4 +345,4 @@ packages:
     source: hosted
     version: "2.1.16"
 sdks:
-  dart: ">=2.2.2 <3.0.0"
+  dart: ">=2.6.0 <3.0.0"

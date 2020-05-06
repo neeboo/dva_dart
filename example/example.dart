@@ -20,6 +20,12 @@ class TestState implements DvaState {
     // TODO: implement toString
     return 'TestState($a,$b,$c)';
   }
+
+  @override
+  TestState clone() {
+    // TODO: implement clone
+    return TestState(this.a, this.b, this.c);
+  }
 }
 
 class MutatedState implements DvaState {
@@ -28,6 +34,12 @@ class MutatedState implements DvaState {
   @override
   String toString() {
     return 'MutatedState(${this.a})';
+  }
+
+  @override
+  MutatedState clone() {
+    // TODO: implement clone
+    return MutatedState(this.a);
   }
 }
 

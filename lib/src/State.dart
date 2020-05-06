@@ -1,3 +1,4 @@
-abstract class DvaState<T> {
+abstract class DvaState {
   const DvaState();
+  DvaState clone();
 }

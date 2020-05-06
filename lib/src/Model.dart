@@ -101,8 +101,8 @@ class DvaModel<S>
 
   void _bindStateSubject() {
     PutEffect currentPutEffect;
-    (transform(_putSubject) as Observable<PutEffect>)
-        .concatMap((PutEffect put) {
+    (transform(_putSubject) as PublishSubject<PutEffect>)
+        .asyncExpand((PutEffect put) {
       currentPutEffect = put;
       return mapPutEffectToReducer(_stateSubject.value, put);
     }).forEach(
